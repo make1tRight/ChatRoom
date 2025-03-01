@@ -12,16 +12,11 @@ sudo apt install libjsoncpp-dev
 # hiredis
 sudo apt-get install libhiredis-dev
 
-# grpc
-sudo apt install -y libgrpc-dev libgrpc++-dev protobuf-compiler-grpc
-sudo apt remove --purge -y libgrpc-dev libgrpc++-dev protobuf-compiler-grpc
-
 # mysql
 sudo apt install  libmysqlcppconn-dev
 
-# protobuf
-sudo apt install -y protobuf-compiler libprotobuf-dev
-sudo apt remove --purge -y protobuf-compiler libprotobuf-dev
+# protobuf & grpc
+# https://blog.csdn.net/weixin_36378508/article/details/130600632
 ```
 
 ## 登录及聊天界面展示
