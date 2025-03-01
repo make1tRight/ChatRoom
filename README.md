@@ -1,5 +1,10 @@
-# Instant_Messaging_Project
-仿微信前端即时通讯项目
+# ChatRoom
+Instant_Messaging_Project in Linux
+
+## 环境配置
+```bash
+
+```
 
 ## 登录及聊天界面展示
 
