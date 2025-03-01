@@ -1,7 +1,7 @@
 #include <iostream>
-#include <json/json.h>
-#include <json/value.h>
-#include <json/reader.h>
+#include <jsoncpp/json/json.h>
+#include <jsoncpp/json/value.h>
+#include <jsoncpp/json/reader.h>
 #include "CServer.h"
 #include "ConfigMgr.h"
 #include "const.h"
@@ -9,8 +9,8 @@
 
 
 void TestRedis() {
-    //Á¬½Óredis ÐèÒªÆô¶¯²Å¿ÉÒÔ½øÐÐÁ¬½Ó
-//redisÄ¬ÈÏ¼àÌý¶Ë¿ÚÎª6387 ¿ÉÒÔÔÙÅäÖÃÎÄ¼þÖÐÐÞ¸Ä
+    //ï¿½ï¿½ï¿½ï¿½redis ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Å¿ï¿½ï¿½Ô½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//redisÄ¬ï¿½Ï¼ï¿½ï¿½ï¿½ï¿½Ë¿ï¿½Îª6387 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½
     redisContext* c = redisConnect("81.68.86.146", 6380);
     if (c->err)
     {
@@ -22,26 +22,26 @@ void TestRedis() {
     std::string redis_password = "123456";
     redisReply* r = (redisReply*)redisCommand(c, "AUTH %s", redis_password.c_str());
     if (r->type == REDIS_REPLY_ERROR) {
-        printf("RedisÈÏÖ¤Ê§°Ü£¡\n");
+        printf("Redisï¿½ï¿½Ö¤Ê§ï¿½Ü£ï¿½\n");
     }
     else {
-        printf("RedisÈÏÖ¤³É¹¦£¡\n");
+        printf("Redisï¿½ï¿½Ö¤ï¿½É¹ï¿½ï¿½ï¿½\n");
     }
 
-    //ÎªredisÉèÖÃkey
+    //Îªredisï¿½ï¿½ï¿½ï¿½key
     const char* command1 = "set stest1 value1";
 
-    //Ö´ÐÐredisÃüÁîÐÐ
+    //Ö´ï¿½ï¿½redisï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     r = (redisReply*)redisCommand(c, command1);
 
-    //Èç¹û·µ»ØNULLÔòËµÃ÷Ö´ÐÐÊ§°Ü
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½NULLï¿½ï¿½Ëµï¿½ï¿½Ö´ï¿½ï¿½Ê§ï¿½ï¿½
     if (NULL == r)
     {
         printf("Execut command1 failure\n");
         redisFree(c);        return;
     }
 
-    //Èç¹ûÖ´ÐÐÊ§°ÜÔòÊÍ·ÅÁ¬½Ó
+    //ï¿½ï¿½ï¿½Ö´ï¿½ï¿½Ê§ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½
     if (!(r->type == REDIS_REPLY_STATUS && (strcmp(r->str, "OK") == 0 || strcmp(r->str, "ok") == 0)))
     {
         printf("Failed to execute command[%s]\n", command1);
@@ -49,14 +49,14 @@ void TestRedis() {
         redisFree(c);        return;
     }
 
-    //Ö´ÐÐ³É¹¦ ÊÍ·ÅredisCommandÖ´ÐÐºó·µ»ØµÄredisReplyËùÕ¼ÓÃµÄÄÚ´æ
+    //Ö´ï¿½Ð³É¹ï¿½ ï¿½Í·ï¿½redisCommandÖ´ï¿½Ðºó·µ»Øµï¿½redisReplyï¿½ï¿½Õ¼ï¿½Ãµï¿½ï¿½Ú´ï¿½
     freeReplyObject(r);
     printf("Succeed to execute command[%s]\n", command1);
 
     const char* command2 = "strlen stest1";
     r = (redisReply*)redisCommand(c, command2);
 
-    //Èç¹û·µ»ØÀàÐÍ²»ÊÇÕûÐÎ ÔòÊÍ·ÅÁ¬½Ó
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½
     if (r->type != REDIS_REPLY_INTEGER)
     {
         printf("Failed to execute command[%s]\n", command2);
@@ -64,13 +64,13 @@ void TestRedis() {
         redisFree(c);        return;
     }
 
-    //»ñÈ¡×Ö·û´®³¤¶È
+    //ï¿½ï¿½È¡ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     int length = r->integer;
     freeReplyObject(r);
     printf("The length of 'stest1' is %d.\n", length);
     printf("Succeed to execute command[%s]\n", command2);
 
-    //»ñÈ¡redis¼üÖµ¶ÔÐÅÏ¢
+    //ï¿½ï¿½È¡redisï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Ï¢
     const char* command3 = "get stest1";
     r = (redisReply*)redisCommand(c, command3);
     if (r->type != REDIS_REPLY_STRING)
@@ -94,7 +94,7 @@ void TestRedis() {
     freeReplyObject(r);
     printf("Succeed to execute command[%s]\n", command4);
 
-    //ÊÍ·ÅÁ¬½Ó×ÊÔ´
+    //ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´
     redisFree(c);
 
 }
@@ -138,12 +138,12 @@ int main()
             if (error) {
                 return;
             }
-            ioc.stop(); //ÒòÎªÒª¸Ä±äiocµÄ×´Ì¬, ËùÒÔÒªÒýÓÃ²¶»ñºóÍ£Ö¹µôioc, ÕâÀïÊÇ×¢²áµÄÂß¼­
+            ioc.stop(); //ï¿½ï¿½ÎªÒªï¿½Ä±ï¿½iocï¿½ï¿½×´Ì¬, ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½ï¿½Í£Ö¹ï¿½ï¿½ioc, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
         });
 
         std::make_shared<CServer>(ioc, port)->Start();
         std::cout << "GateServer listen on port: " << port << std::endl;
-        ioc.run();  //Æô¶¯ÂÖÑ¯
+        ioc.run();  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯
     }
     catch (std::exception const& e) {
         std::cerr << "Error: " << e.what() << std::endl;
@@ -159,7 +159,7 @@ int main()
 
 
 
-// boost¿âÅäÖÃÊÇ·ñ³É¹¦µÄ²âÊÔÎÄ¼þ
+// boostï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½É¹ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
 //#include <iostream>
 //#include <string>
 //#include "boost/lexical_cast.hpp"
@@ -179,4 +179,4 @@ int main()
 //    return 0;
 //}
 
-/***********jsoncppÅäÖÃÊÇ·ñ³É¹¦µÄ²âÊÔÎÄ¼þ****************/
+/***********jsoncppï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½É¹ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½****************/
