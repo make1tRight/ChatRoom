@@ -254,6 +254,8 @@ GateServer: CMakeFiles/GateServer.dir/GateServer/VarifyGrpcClient.cpp.o
 GateServer: CMakeFiles/GateServer.dir/build.make
 GateServer: /usr/lib/x86_64-linux-gnu/libboost_system.so.1.74.0
 GateServer: /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.74.0
+GateServer: /usr/lib/x86_64-linux-gnu/libhiredis.so
+GateServer: /usr/local/lib/libprotobuf.so
 GateServer: /usr/lib/x86_64-linux-gnu/libboost_atomic.so.1.74.0
 GateServer: CMakeFiles/GateServer.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/tom/workspace/ChatRoom/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable GateServer"

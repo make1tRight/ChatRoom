@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DBOOST_ALL_NO_LIB -DBOOST_ATOMIC_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DBOOST_THREAD_DYN_LINK
 
-CXX_INCLUDES = -I/home/tom/workspace/ChatRoom/GateServer
+CXX_INCLUDES = -I/home/tom/workspace/ChatRoom/GateServer -I/usr/local/grpc/include
 
 CXX_FLAGS = 
 

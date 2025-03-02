@@ -8,25 +8,25 @@ CServer::CServer(boost::asio::io_context& ioc, unsigned short& port):
 }
 
 void CServer::Start() {
-    //[5-12:00]·ÀÖ¹»Øµ÷º¯Êıµ÷ÓÃµÄÊ±ºòÀà±»Îö¹¹µô, ÕâÀïÊ¹ÓÃÖÇÄÜÖ¸Õë, ¿¿ÒıÓÃ¼ÆÊıÀ´Î¬³ÖÀà¶ÔÏóµÄÉúÃüÖÜÆÚ
+    //[5-12:00]é˜²æ­¢å›è°ƒå‡½æ•°è°ƒç”¨çš„æ—¶å€™ç±»è¢«ææ„æ‰, è¿™é‡Œä½¿ç”¨æ™ºèƒ½æŒ‡é’ˆ, é å¼•ç”¨è®¡æ•°æ¥ç»´æŒç±»å¯¹è±¡çš„ç”Ÿå‘½å‘¨æœŸ
     auto self = shared_from_this();
     auto& io_context = AsioIOContextPool::GetInstance()->GetIOContext();
     std::shared_ptr<HttpConnection> new_conn = std::make_shared<HttpConnection>(io_context);
-    //Òì²½½ÓÊÕ
-    m_acceptor.async_accept(new_conn->GetSocket(), [self, new_conn](beast::error_code ec) {    //ÕâÀï²¶»ñÊÇÎªÁËÔö¼ÓÒıÓÃ¼ÆÊı
+    //å¼‚æ­¥æ¥æ”¶
+    m_acceptor.async_accept(new_conn->GetSocket(), [self, new_conn](beast::error_code ec) {    //è¿™é‡Œæ•è·æ˜¯ä¸ºäº†å¢åŠ å¼•ç”¨è®¡æ•°
         try {
-            //³ö´í·ÅÆúµ±Ç°Á¬½Ó, ¼ÌĞø¼àÌıÆäËûÁ¬½Ó
+            //å‡ºé”™æ”¾å¼ƒå½“å‰è¿æ¥, ç»§ç»­ç›‘å¬å…¶ä»–è¿æ¥
             if (ec) {
-                self->Start(); //¼àÌıÆäËûÁ¬½Ó
+                self->Start(); //ç›‘å¬å…¶ä»–è¿æ¥
                 return;
             }
 
-            //´´½¨ĞÂÁ¬½Ó, ²¢ÇÒ´´½¨HttpConnectionÀà¹ÜÀíÕâ¸öÁ¬½Ó
-            //std::make_shared<HttpConnection>(std::move(self->m_socket))->Start();      //[5-17:56]¹ØÓÚÓÒÖµÒıÓÃºÍÒÆ¶¯¹¹Ôì
-            new_conn->Start(); //Ïß³Ì³ØÌæ»»µ¥Ïß³Ì 
+            //åˆ›å»ºæ–°è¿æ¥, å¹¶ä¸”åˆ›å»ºHttpConnectionç±»ç®¡ç†è¿™ä¸ªè¿æ¥
+            //std::make_shared<HttpConnection>(std::move(self->m_socket))->Start();      //[5-17:56]å…³äºå³å€¼å¼•ç”¨å’Œç§»åŠ¨æ„é€ 
+            new_conn->Start(); //çº¿ç¨‹æ± æ›¿æ¢å•çº¿ç¨‹ 
             //HttpConnection(std::move(m_socket));
 
-            //¼ÌĞø¼àÌı
+            //ç»§ç»­ç›‘å¬
             self->Start();
         }
         catch (std::exception& exp) {

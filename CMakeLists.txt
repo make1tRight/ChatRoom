@@ -6,9 +6,14 @@ set(CMAKE_CXX_STANDARD 17)
 
 # 设置 Boost 的路径
 set(BOOST_ROOT /usr)
+set(gRPC_ROOT /usr/local/grpc)
 
 # 查找 Boost 库的组件
 find_package(Boost REQUIRED COMPONENTS system thread)
+find_package(Protobuf REQUIRED)
+find_package(gRPC REQUIRED)
+
+find_library(HIREDIS_LIB hiredis)
 
 # 添加可执行文件和源文件
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/GateServer/*.cpp)
@@ -19,12 +24,7 @@ add_executable(GateServer ${SOURCES})
 target_include_directories(GateServer 
     PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/GateServer
-)
-
-# 包含 Boost 头文件路径
-target_include_directories(GateServer
-    PRIVATE 
-    ${Boost_INCLUDE_DIRS}
+    ${gRPC_ROOT}/include
 )
 
 # 链接 Boost 库
@@ -32,4 +32,7 @@ target_link_libraries(
     GateServer 
     PRIVATE 
     ${Boost_LIBRARIES}
+    ${HIREDIS_LIB}
+    ${gRPC_LIBRARIES}
+    ${Protobuf_LIBRARIES}
 )
