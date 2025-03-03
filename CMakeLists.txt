@@ -2,32 +2,31 @@ cmake_minimum_required(VERSION 3.12)
 project(GateServer)
 
 # 设置 C++ 标准
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
-# 设置 Boost 的路径
-set(BOOST_ROOT /usr)
-set(gRPC_ROOT /usr/local/lib/cmake/grpc)
-set(absl_ROOT /usr/local/lib/cmake/absl)
-
-# set(Protobuf_ROOT /usr/local)
-# set(CMAKE_PREFIX_PATH "/usr/local")
-
-set(Protobuf_PROTOC_EXECUTABLE "/usr/local/bin/protoc" CACHE FILEPATH "Path to protoc compiler")
-set(Protobuf_INCLUDE_DIR "/usr/local/include")
-set(Protobuf_LIBRARY "/usr/local/lib/libprotobuf.a")
-set(Protobuf_LITE_LIBRARY "/usr/local/lib/libprotobuf-lite.a")
-set(Protobuf_PROTOC_LIBRARY "/usr/local/lib/libprotoc.a")
-
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Debug")
+endif()
 
 # 查找 Boost 库的组件
 find_package(Boost REQUIRED COMPONENTS filesystem thread)
-find_package(Protobuf HINTS ${Protobuf_ROOT} CONFIG REQUIRED)
-# find_package(Protobuf REQUIRED)
-find_package(absl HINTS ${absl_ROOT} CONFIG REQUIRED)
+find_package(Protobuf REQUIRED)
 find_package(jsoncpp REQUIRED)
-find_package(gRPC REQUIRED PATHS ${gRPC_ROOT} NO_DEFAULT_PATH)
+find_package(gRPC CONFIG REQUIRED)
+# find_package(gRPC CONFIG REQUIRED PATHS "/usr/local/lib/cmake/grpc" NO_DEFAULT_PATH)
 
-find_library(HIREDIS_LIB hiredis)
+
+# find_library(HIREDIS_LIB hiredis)
+
+message(STATUS "Protobuf_INCLUDE_DIRS: ${Protobuf_INCLUDE_DIRS}")
+message(STATUS "Protobuf_LIBRARIES: ${Protobuf_LIBRARIES}")
+message(STATUS "jsoncpp_INCLUDE_DIRS: ${jsoncpp_INCLUDE_DIRS}")
+message(STATUS "jsoncpp_LIBRARIES: ${jsoncpp_LIBRARIES}")
+message(STATUS "gRPC_INCLUDE_DIRS: ${gRPC_INCLUDE_DIRS}")
+message(STATUS "gRPC_LIBRARIES: ${gRPC_LIBRARIES}")
+message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
+message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARIES}")
+
 
 # 添加可执行文件和源文件
 file(GLOB
@@ -42,7 +41,7 @@ add_executable(GateServer ${SOURCES})
 target_include_directories(GateServer 
     PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/GateServer
-    ${gRPC_ROOT}/include
+    ${Boost_INCLUDE_DIRS}
     ${Protobuf_INCLUDE_DIRS}
 )
 
@@ -51,27 +50,9 @@ target_link_libraries(
     GateServer 
     PRIVATE
     ${Boost_LIBRARIES}
-    ${HIREDIS_LIB}
-    ${gRPC_LIBRARIES}
-    ${Protobuf_LIBRARY}
-    ${Protobuf_LITE_LIBRARY}
-    ${Protobuf_PROTOC_LIBRARY}
-    absl::base
-    absl::debugging
-    absl::flags
-    absl::hash
-    absl::log
-    absl::memory
-    absl::meta
-    absl::numeric
-    absl::raw_logging_internal
-    absl::strings
-    absl::synchronization
-    absl::time
-    absl::utility
-    absl::variant
-    absl::symbolize
-    absl::stacktrace
-    absl::debugging_internal
+    hiredis
+    gRPC::grpc++
+    ${Protobuf_LIBRARIES}
     jsoncpp
+    mysqlcppconn
 )
