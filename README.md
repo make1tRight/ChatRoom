@@ -20,7 +20,7 @@ sudo apt-get install libhiredis-dev
 sudo apt install libmysqlcppconn-dev
 
 # protobuf & grpc protobuf和grpc版本要对应
-# grpc clone以后要先编译protobuf
+# 先编译protobuf后编译grpc
 # 具体参考下面2链接
 # https://blog.csdn.net/weixin_36378508/article/details/130600632
 # https://developer.aliyun.com/article/819208
@@ -49,3 +49,46 @@ sudo apt install libmysqlcppconn-dev
 ![chatlogin](./distributed_servers.png)
 
 ![communication](./communication.png)
+
+
+## 编译注意事项
+### 下载并编译grpc
+```bash
+# 1. 获取源码包
+git clone https://github.com/grpc/grpc.git`
+# 2. 更新gpc依赖的第三方库
+cd grpc 
+git submodule update --init
+
+# 3. 编译
+mkdir -p cmake/build
+pushd cmake/build
+## 编译并安装 | -DgRPC_INSTALL=ON 
+## 安装abseil | -DABSL_ENABLE_INSTALL=TRUE 安装abseil
+## -DBUILD_SHARED_LIBS=ON | 编译成动态库[去掉再试试]
+## CMakeLists.txt所在目录 | ../..
+cmake -DgRPC_INSTALL=ON -DABSL_ENABLE_INSTALL=TRUE ../..
+make -j 4
+# 4. 安装 | 默认位置是/usr/local
+sudo make install
+popd
+```
+### 编译grpc包中的protobuf
+```bash
+# 1. 更新gpc依赖的第三方库
+cd third_party/protobuf
+git submodule update --init --recursive
+# bazel编译protobuf
+sudo apt-get install g++ git bazel
+bazel build :protoc :protobuf --enable_bzlmod
+# 拷贝到工作目录中去
+cp bazel-bin/protoc /usr/local/bin
+
+mkdir -p cmake/build
+pushd cmake/build
+cmake ../..
+make -j 4
+sudo make install
+```
+
+### 先编译protobuf后编译grpc

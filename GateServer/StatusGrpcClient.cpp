@@ -6,8 +6,8 @@ GetChatServerRsp StatusGrpcClient::GetChatServer(int uid) {
 	GetChatServerReq request;
 	request.set_uid(uid);
 	auto stub = pool_->getConnection();
-	Status status = stub->GetChatServer(&context, request, &reply);	//¸ù¾Ýreply·µ»Ø²»Í¬µÄÇé¿ö
-	Defer defer([&stub, this]() {	//ÓÃÍê×Ô¶¯·µ»ØÁ¬½Ó, ÒòÎªËûµÄÎö¹¹º¯Êý¾ÍÊÇÎÒÃÇÔÚÕâÀï¶¨ÒåµÄÕâ¸ö¶«Î÷
+	Status status = stub->GetChatServer(&context, request, &reply);	//æ ¹æ®replyè¿”å›žä¸åŒçš„æƒ…å†µ
+	Defer defer([&stub, this]() {	//ç”¨å®Œè‡ªåŠ¨è¿”å›žè¿žæŽ¥, å› ä¸ºä»–çš„æžæž„å‡½æ•°å°±æ˜¯æˆ‘ä»¬åœ¨è¿™é‡Œå®šä¹‰çš„è¿™ä¸ªä¸œè¥¿
 		pool_->returnConnection(std::move(stub));
 	});
 	if (status.ok()) {

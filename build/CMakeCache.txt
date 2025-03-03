@@ -17,10 +17,10 @@
 //The directory containing a CMake configuration file for Boost.
 Boost_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0
 
+Boost_FILESYSTEM_LIBRARY_RELEASE:STRING=/usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.74.0
+
 //Path to a file.
 Boost_INCLUDE_DIR:PATH=/usr/include
-
-Boost_SYSTEM_LIBRARY_RELEASE:STRING=/usr/lib/x86_64-linux-gnu/libboost_system.so.1.74.0
 
 Boost_THREAD_LIBRARY_RELEASE:STRING=/usr/lib/x86_64-linux-gnu/libboost_thread.so.1.74.0
 
@@ -228,50 +228,41 @@ GateServer_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 GateServer_SOURCE_DIR:STATIC=/home/tom/workspace/ChatRoom
 
-//Path to a library.
-HIREDIS_LIB:FILEPATH=/usr/lib/x86_64-linux-gnu/libhiredis.so
+//The directory containing a CMake configuration file for Protobuf.
+Protobuf_DIR:PATH=/usr/local/lib/cmake/protobuf
 
-//Path to a file.
-Protobuf_INCLUDE_DIR:PATH=/usr/local/include
-
-//Path to a library.
-Protobuf_LIBRARY_DEBUG:FILEPATH=/usr/local/lib/libprotobuf.so
-
-//Path to a library.
-Protobuf_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libprotobuf.so
-
-//Path to a library.
-Protobuf_LITE_LIBRARY_DEBUG:FILEPATH=/usr/local/lib/libprotobuf-lite.so
-
-//Path to a library.
-Protobuf_LITE_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libprotobuf-lite.so
-
-//The Google Protocol Buffers Compiler
-Protobuf_PROTOC_EXECUTABLE:FILEPATH=/usr/local/grpc/bin/protoc
-
-//Path to a library.
-Protobuf_PROTOC_LIBRARY_DEBUG:FILEPATH=/usr/local/lib/libprotoc.so
-
-//Path to a library.
-Protobuf_PROTOC_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libprotoc.so
+//Path to protoc compiler
+Protobuf_PROTOC_EXECUTABLE:FILEPATH=/usr/local/bin/protoc
 
 //The directory containing a CMake configuration file for absl.
-absl_DIR:PATH=/usr/local/grpc/lib/cmake/absl
+absl_DIR:PATH=/usr/local/lib/cmake/absl
 
 //The directory containing a CMake configuration file for boost_atomic.
 boost_atomic_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_atomic-1.74.0
 
+//The directory containing a CMake configuration file for boost_filesystem.
+boost_filesystem_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_filesystem-1.74.0
+
 //The directory containing a CMake configuration file for boost_headers.
 boost_headers_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_headers-1.74.0
-
-//The directory containing a CMake configuration file for boost_system.
-boost_system_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_system-1.74.0
 
 //The directory containing a CMake configuration file for boost_thread.
 boost_thread_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_thread-1.74.0
 
 //The directory containing a CMake configuration file for gRPC.
-gRPC_DIR:PATH=gRPC_DIR-NOTFOUND
+gRPC_DIR:PATH=/usr/local/lib/cmake/grpc
+
+//The directory containing a CMake configuration file for jsoncpp.
+jsoncpp_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/jsoncpp
+
+//CMake built-in FindProtobuf.cmake module compatible
+protobuf_MODULE_COMPATIBLE:BOOL=OFF
+
+//Enable for verbose output
+protobuf_VERBOSE:BOOL=OFF
+
+//The directory containing a CMake configuration file for utf8_range.
+utf8_range_DIR:PATH=/usr/local/lib/cmake/utf8_range
 
 
 ########################
@@ -428,33 +419,19 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding Boost
-FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake][cfound components: system thread ][v1.74.0()]
-//Details about finding Protobuf
-FIND_PACKAGE_MESSAGE_DETAILS_Protobuf:INTERNAL=[/usr/local/lib/libprotobuf.so][/usr/local/include][vERROR.ERROR.ERROR()]
+FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake][cfound components: filesystem thread ][v1.74.0()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
-//ADVANCED property for variable: Protobuf_INCLUDE_DIR
-Protobuf_INCLUDE_DIR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Protobuf_LIBRARY_DEBUG
-Protobuf_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Protobuf_LIBRARY_RELEASE
-Protobuf_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Protobuf_LITE_LIBRARY_DEBUG
-Protobuf_LITE_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Protobuf_LITE_LIBRARY_RELEASE
-Protobuf_LITE_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Protobuf_PROTOC_EXECUTABLE
-Protobuf_PROTOC_EXECUTABLE-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Protobuf_PROTOC_LIBRARY_DEBUG
-Protobuf_PROTOC_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Protobuf_PROTOC_LIBRARY_RELEASE
-Protobuf_PROTOC_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: boost_atomic_DIR
 boost_atomic_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_filesystem_DIR
+boost_filesystem_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: boost_headers_DIR
 boost_headers_DIR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: boost_system_DIR
-boost_system_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: boost_thread_DIR
 boost_thread_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: protobuf_MODULE_COMPATIBLE
+protobuf_MODULE_COMPATIBLE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: protobuf_VERBOSE
+protobuf_VERBOSE-ADVANCED:INTERNAL=1
 
