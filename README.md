@@ -92,3 +92,22 @@ sudo make install
 ```
 
 ### 先编译protobuf后编译grpc
+
+### 最终加入utf8_range库成功编译了一次
+```
+find_package(utf8_range REQUIRED)
+
+target_link_libraries(
+    GateServer 
+    PRIVATE
+    utf8_range::utf8_range
+    utf8_range::utf8_validity
+)
+
+# cmake .. 出现以下内容不影响项目的编译
+#CMake Warning at /usr/share/cmake-3.22/Modules/FindProtobuf.cmake:524 (message):
+#  Protobuf compiler version 29.0 doesn't match library version 5.29.0
+#Call Stack (most recent call first):
+#  CMakeLists.txt:13 (find_package)
+
+```

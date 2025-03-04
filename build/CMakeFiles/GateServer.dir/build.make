@@ -286,8 +286,10 @@ GateServer: CMakeFiles/GateServer.dir/GateServer/message.pb.cc.o
 GateServer: CMakeFiles/GateServer.dir/build.make
 GateServer: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.74.0
 GateServer: /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.74.0
-GateServer: /usr/local/lib/libgrpc++.a
 GateServer: /usr/local/lib/libprotobuf.a
+GateServer: /usr/local/lib/libgrpc++.a
+GateServer: /usr/local/lib/libutf8_range.a
+GateServer: /usr/local/lib/libutf8_validity.a
 GateServer: /usr/lib/x86_64-linux-gnu/libboost_atomic.so.1.74.0
 GateServer: /usr/local/lib/libgrpc.a
 GateServer: /usr/local/lib/libupb_json_lib.a
@@ -367,21 +369,21 @@ GateServer: /usr/local/lib/libabsl_graphcycles_internal.a
 GateServer: /usr/local/lib/libabsl_kernel_timeout_internal.a
 GateServer: /usr/local/lib/libabsl_malloc_internal.a
 GateServer: /usr/local/lib/libabsl_time.a
-GateServer: /usr/local/lib/libabsl_strings.a
-GateServer: /usr/local/lib/libabsl_int128.a
-GateServer: /usr/local/lib/libabsl_strings_internal.a
-GateServer: /usr/local/lib/libabsl_string_view.a
-GateServer: /usr/local/lib/libabsl_throw_delegate.a
-GateServer: /usr/local/lib/libabsl_base.a
-GateServer: /usr/local/lib/libabsl_spinlock_wait.a
-GateServer: /usr/local/lib/libabsl_raw_logging_internal.a
-GateServer: /usr/local/lib/libabsl_log_severity.a
 GateServer: /usr/local/lib/libabsl_civil_time.a
 GateServer: /usr/local/lib/libabsl_time_zone.a
 GateServer: /usr/local/lib/libssl.a
 GateServer: /usr/local/lib/libcrypto.a
 GateServer: /usr/local/lib/libaddress_sorting.a
 GateServer: /usr/local/lib/libprotobuf.a
+GateServer: /usr/local/lib/libabsl_strings.a
+GateServer: /usr/local/lib/libabsl_strings_internal.a
+GateServer: /usr/local/lib/libabsl_string_view.a
+GateServer: /usr/local/lib/libabsl_base.a
+GateServer: /usr/local/lib/libabsl_spinlock_wait.a
+GateServer: /usr/local/lib/libabsl_int128.a
+GateServer: /usr/local/lib/libabsl_throw_delegate.a
+GateServer: /usr/local/lib/libabsl_raw_logging_internal.a
+GateServer: /usr/local/lib/libabsl_log_severity.a
 GateServer: CMakeFiles/GateServer.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/tom/workspace/ChatRoom/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable GateServer"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/GateServer.dir/link.txt --verbose=$(VERBOSE)

@@ -13,7 +13,7 @@ find_package(Boost REQUIRED COMPONENTS filesystem thread)
 find_package(Protobuf REQUIRED)
 find_package(jsoncpp REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
-# find_package(gRPC CONFIG REQUIRED PATHS "/usr/local/lib/cmake/grpc" NO_DEFAULT_PATH)
+find_package(utf8_range REQUIRED)
 
 
 # find_library(HIREDIS_LIB hiredis)
@@ -50,9 +50,11 @@ target_link_libraries(
     GateServer 
     PRIVATE
     ${Boost_LIBRARIES}
-    hiredis
-    gRPC::grpc++
     ${Protobuf_LIBRARIES}
+    gRPC::grpc++
+    hiredis
     jsoncpp
     mysqlcppconn
+    utf8_range::utf8_range
+    utf8_range::utf8_validity
 )

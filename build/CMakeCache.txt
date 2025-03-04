@@ -273,6 +273,9 @@ gRPC_DIR:PATH=/usr/local/lib/cmake/grpc
 //The directory containing a CMake configuration file for jsoncpp.
 jsoncpp_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/jsoncpp
 
+//The directory containing a CMake configuration file for utf8_range.
+utf8_range_DIR:PATH=/usr/local/lib/cmake/utf8_range
+
 
 ########################
 # INTERNAL cache entries
