@@ -27,7 +27,8 @@ file(GLOB
 add_executable(GateServer ${SOURCES})
 
 # 包含头文件路径（包括其他目录）
-target_include_directories(GateServer 
+target_include_directories(
+    GateServer
     PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/GateServer
     ${Boost_INCLUDE_DIRS}
