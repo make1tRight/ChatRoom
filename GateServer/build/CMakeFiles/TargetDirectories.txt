@@ -1,3 +1,0 @@
-/home/admin/workspace/InstantMessaging/GateServer/build/CMakeFiles/GateServer.dir
-/home/admin/workspace/InstantMessaging/GateServer/build/CMakeFiles/edit_cache.dir
-/home/admin/workspace/InstantMessaging/GateServer/build/CMakeFiles/rebuild_cache.dir
