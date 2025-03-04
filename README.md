@@ -19,11 +19,13 @@ sudo apt-get install libhiredis-dev
 # mysql
 sudo apt install libmysqlcppconn-dev
 
-# protobuf & grpc protobuf和grpc版本要对应
-# 先编译protobuf后编译grpc
-# 具体参考下面2链接
+# protobuf & grpc 参考以下三个链接
 # https://blog.csdn.net/weixin_36378508/article/details/130600632
 # https://developer.aliyun.com/article/819208
+# https://gitbookcpp.llfc.club/sections/cpp/distribute/asio27.html
+# 注意事项:
+# 1. 下载grpc包, 先在third_party/protobuf里面编译protobuf, 否则grpc和protobuf可能不兼容
+# 2. 必须先编译protobuf后编译grpc
 ```
 
 ## 客户端界面展示
@@ -51,32 +53,17 @@ sudo apt install libmysqlcppconn-dev
 ![communication](./communication.png)
 
 
-## 编译注意事项
-### 下载并编译grpc
+## 编译gRPC注意事项
+### 1. 下载grpc源码包
 ```bash
-# 1. 获取源码包
+# 获取源码包
 git clone https://github.com/grpc/grpc.git`
-# 2. 更新gpc依赖的第三方库
-cd grpc 
-git submodule update --init
-
-# 3. 编译
-mkdir -p cmake/build
-pushd cmake/build
-## 编译并安装 | -DgRPC_INSTALL=ON 
-## 安装abseil | -DABSL_ENABLE_INSTALL=TRUE 安装abseil
-## -DBUILD_SHARED_LIBS=ON | 编译成动态库[去掉再试试]
-## CMakeLists.txt所在目录 | ../..
-cmake -DgRPC_INSTALL=ON -DABSL_ENABLE_INSTALL=TRUE ../..
-make -j 4
-# 4. 安装 | 默认位置是/usr/local
-sudo make install
-popd
 ```
-### 编译grpc包中的protobuf
+
+### 2. 编译并安装grpc包中的protobuf
 ```bash
-# 1. 更新gpc依赖的第三方库
 cd third_party/protobuf
+# 更新protobuf依赖的第三方库
 git submodule update --init --recursive
 # bazel编译protobuf
 sudo apt-get install g++ git bazel
@@ -91,10 +78,40 @@ make -j 4
 sudo make install
 ```
 
-### 先编译protobuf后编译grpc
-
-### 最终加入utf8_range库成功编译了一次
+### 3. 编译并安装grpc
+```bash
+cd grpc
+# 更新gpc依赖的第三方库
+git submodule update --init
+# 编译并安装
+mkdir -p cmake/build
+pushd cmake/build
+# 安装abseil | -DABSL_ENABLE_INSTALL=TRUE 安装abseil
+# 安装gRPC | -DgRPC_INSTALL=ON
+# CMakeLists.txt所在目录 | ../..
+cmake -DgRPC_INSTALL=ON -DABSL_ENABLE_INSTALL=TRUE ../..
+make -j 4
+# 安装默认位置是/usr/local
+sudo make install
+popd
 ```
+
+### 4. 验证gRPC已成功安装
+```bash
+cd grpc/examples/cpp/helloworld
+mkdir build
+cd build
+# 编译
+cmake ..
+make -j8
+```
+
+## 编写CMakeLists.txt注意事项
+- gRPC例程通过了说明gRPC和protobuf是没问题的
+- 后续需要通过make报错日志修改CMakeLists.txt
+- 最终加入utf8_range库成功编译了一次
+
+```bash
 find_package(utf8_range REQUIRED)
 
 target_link_libraries(
@@ -109,5 +126,4 @@ target_link_libraries(
 #  Protobuf compiler version 29.0 doesn't match library version 5.29.0
 #Call Stack (most recent call first):
 #  CMakeLists.txt:13 (find_package)
-
 ```
