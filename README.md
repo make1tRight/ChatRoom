@@ -58,6 +58,7 @@ sudo apt install libmysqlcppconn-dev
 ```bash
 # 获取源码包
 git clone https://github.com/grpc/grpc.git`
+cd grpc
 ```
 
 ### 2. 编译并安装grpc包中的protobuf
