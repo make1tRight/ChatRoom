@@ -59,6 +59,8 @@ sudo apt install libmysqlcppconn-dev
 # 获取源码包
 git clone https://github.com/grpc/grpc.git
 cd grpc
+# 更新grpc依赖的第三方库
+git submodule update --init
 ```
 
 ### 2. 编译并安装grpc包中的protobuf
@@ -77,13 +79,12 @@ pushd cmake/build
 cmake ../..
 make -j 4
 sudo make install
+popd
 ```
 
 ### 3. 编译并安装grpc
 ```bash
 cd grpc
-# 更新gpc依赖的第三方库
-git submodule update --init
 # 编译并安装
 mkdir -p cmake/build
 pushd cmake/build
@@ -104,7 +105,8 @@ mkdir build
 cd build
 # 编译
 cmake ..
-make -j8
+make -j 4
+# 编译完成后，分别执行greeter_server和greeter_client进行测试
 ```
 
 ## 编写CMakeLists.txt注意事项
