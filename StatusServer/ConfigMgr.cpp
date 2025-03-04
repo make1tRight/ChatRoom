@@ -2,7 +2,10 @@
 
 ConfigMgr::ConfigMgr() {
     boost::filesystem::path current_path = boost::filesystem::current_path(); //当前文件的路径
-    boost::filesystem::path config_path = current_path / "config.ini";
+    // boost::filesystem::path config_path = current_path / "config.ini";
+    boost::filesystem::path source_path = __FILE__;  // 当前源码文件路径
+    boost::filesystem::path project_root = source_path.parent_path(); // ChatRoom 目录
+    boost::filesystem::path config_path = project_root / "config.ini";
     std::cout << "Config path: " << config_path << std::endl;
 
     boost::property_tree::ptree pt;
@@ -33,5 +36,4 @@ ConfigMgr::ConfigMgr() {
             std::cout << key_value_pair.first << "=" << key_value_pair.second << std::endl;
         }
     }
-
 }

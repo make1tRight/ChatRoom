@@ -1,12 +1,12 @@
 #pragma once
 #include "const.h"
 #include <thread>
-#include <jdbc/mysql_driver.h>
-#include <jdbc/mysql_connection.h>
-#include <jdbc/cppconn/prepared_statement.h>
-#include <jdbc/cppconn/resultset.h>
-#include <jdbc/cppconn/statement.h>
-#include <jdbc/cppconn/exception.h>
+#include <mysql_driver.h>
+#include <mysql_connection.h>
+#include <cppconn/prepared_statement.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
+#include <cppconn/exception.h>
 
 class SqlConnection {
 public:
@@ -26,7 +26,7 @@ public:
                 //std::unique_ptr <sql::Connection> con(driver->connect(url_, user_, pass_));
                 auto* con = driver->connect(url_, user_, pass_);
                 con->setSchema(schema_);
-                // »ñÈ¡µ±Ç°Ê±¼ä´Á
+                // ï¿½ï¿½È¡ï¿½ï¿½Ç°Ê±ï¿½ï¿½ï¿½
                 auto currentTime = std::chrono::system_clock::now().time_since_epoch();
                 long long timestamp = std::chrono::duration_cast<std::chrono::seconds>(currentTime).count();
                 pool_.push(std::make_unique<SqlConnection>(con, timestamp));
@@ -37,10 +37,10 @@ public:
                     std::this_thread::sleep_for(std::chrono::seconds(60));
                 }
             });
-            _check_thread.detach(); //½»¸ø²Ù×÷ÏµÍ³¹ÜÀí
+            _check_thread.detach(); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½
         }
         catch (sql::SQLException& e) {
-            // ´¦ÀíÒì³£Çé¿ö
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½
             std::cout << "mysql pool init failed, error is " << e.what() << std::endl;
         }
     }
@@ -49,12 +49,12 @@ public:
         std::lock_guard<std::mutex> guard(mutex_);
         int poolSize = pool_.size();
         auto currentTime = std::chrono::system_clock::now().time_since_epoch();
-        // ½«Ê±¼ä´Á×ª»»ÎªÃë
+        // ï¿½ï¿½Ê±ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªï¿½ï¿½
         long long timestamp = std::chrono::duration_cast<std::chrono::seconds>(currentTime).count();
         for (int i = 0; i < poolSize; ++i) {
             auto con = std::move(pool_.front());
             pool_.pop();
-            Defer defer([this, &con]() {    //DeferÀà±£Ö¤²»¹Ü³öÏÖÊ²Ã´Òì³£¶¼ÄÜ¹»°ÑÈ¡³öÀ´µÄÁ¬½Ó»¹»Ø³Ø×ÓÀï
+            Defer defer([this, &con]() {    //Deferï¿½à±£Ö¤ï¿½ï¿½ï¿½Ü³ï¿½ï¿½ï¿½Ê²Ã´ï¿½ì³£ï¿½ï¿½ï¿½Ü¹ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó»ï¿½ï¿½Ø³ï¿½ï¿½ï¿½ï¿½ï¿½
                 pool_.push(std::move(con));
             });
 
@@ -109,7 +109,7 @@ public:
     }
 
     ~MysqlPool() {
-        std::unique_lock<std::mutex> lock(mutex_); //¿ÉÓÃlock_guard
+        std::unique_lock<std::mutex> lock(mutex_); //ï¿½ï¿½ï¿½ï¿½lock_guard
         while (!pool_.empty()) {
             pool_.pop();
         }
@@ -119,13 +119,13 @@ private:
     std::string url_;
     std::string user_;
     std::string pass_;
-    std::string schema_;        //Êý¾Ý¿âµÄÃû×Ö
+    std::string schema_;        //ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     int poolSize_;
     std::queue<std::unique_ptr<SqlConnection>> pool_;
     std::mutex mutex_;
     std::condition_variable cond_;
     std::atomic<bool> b_stop_;
-    std::thread _check_thread;  //ÐÄÌø»úÖÆ
+    std::thread _check_thread;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 };
 
 struct UserInfo {
@@ -146,4 +146,4 @@ public:
     bool CheckPwd(const std::string& name, const std::string& pwd, UserInfo& userinfo);
 private:
     std::unique_ptr<MysqlPool> pool_;
-};//ÔöÉ¾¸Ä²é×¨ÓÃÀà
+};//ï¿½ï¿½É¾ï¿½Ä²ï¿½×¨ï¿½ï¿½ï¿½ï¿½

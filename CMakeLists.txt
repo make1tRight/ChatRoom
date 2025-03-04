@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(GateServer)
+project(StatusServer)
 
 # 设置 C++ 标准
 set(CMAKE_CXX_STANDARD 20)
@@ -20,24 +20,24 @@ message(STATUS "Protobuf_LIBRARIES: ${Protobuf_LIBRARIES}")
 # 添加可执行文件和源文件
 file(GLOB
     SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/GateServer/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/GateServer/*.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/StatusServer/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/StatusServer/*.cc
 )
 
-add_executable(GateServer ${SOURCES})
+add_executable(StatusServer ${SOURCES})
 
 # 包含头文件路径（包括其他目录）
 target_include_directories(
-    GateServer
+    StatusServer
     PRIVATE 
-    ${CMAKE_CURRENT_SOURCE_DIR}/GateServer
+    ${CMAKE_CURRENT_SOURCE_DIR}/StatusServer
     ${Boost_INCLUDE_DIRS}
     ${Protobuf_INCLUDE_DIRS}
 )
 
 # 链接相关库
 target_link_libraries(
-    GateServer 
+    StatusServer 
     PRIVATE
     ${Boost_LIBRARIES}
     ${Protobuf_LIBRARIES}

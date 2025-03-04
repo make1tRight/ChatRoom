@@ -2,12 +2,12 @@
 //
 
 #include <iostream>
-#include <json/json.h>
-#include <json/value.h>
-#include <json/reader.h>
+#include <jsoncpp/json/json.h>
+#include <jsoncpp/json/value.h>
+#include <jsoncpp/json/reader.h>
 #include "const.h"
 #include "ConfigMgr.h"
-#include "hiredis.h"
+#include <hiredis/hiredis.h>
 #include "RedisMgr.h"
 #include "MysqlMgr.h"
 #include "AsioIOContextPool.h"
@@ -24,17 +24,17 @@ void RunServer() {
     std::string server_address(cfg["StatusServer"]["Host"] + ":" + cfg["StatusServer"]["Port"]);
     StatusServiceImpl service;
     grpc::ServerBuilder builder;
-    //¼àÌý¶Ë¿ÚºÍÌí¼Ó·þÎñ
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ë¿Úºï¿½ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
     builder.RegisterService(&service);
-    //¹¹½¨²¢Æô¶¯gRPC·þÎñÆ÷
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gRPCï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
     std::cout << "Server listening on " << server_address << std::endl;
-    //´´½¨Boost.AsioµÄio_context
+    //ï¿½ï¿½ï¿½ï¿½Boost.Asioï¿½ï¿½io_context
     boost::asio::io_context io_context;
-    //´´½¨signal_setÓÃÓÚ²¶»ñSIGINT
+    //ï¿½ï¿½ï¿½ï¿½signal_setï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½SIGINT
     boost::asio::signal_set signals(io_context, SIGINT, SIGTERM);
-    //ÉèÖÃÒì²½µÈ´ýSIGINTÐÅºÅ
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ì²½ï¿½È´ï¿½SIGINTï¿½Åºï¿½
     signals.async_wait([&server, &io_context](const boost::system::error_code& error, int signal_number) {
         if (!error) {
             std::cout << "Shutting down server..." << std::endl;
@@ -42,9 +42,9 @@ void RunServer() {
             io_context.stop();
         }
     });
-    //ÔÚµ¥¶ÀÏß³ÌÖÐÔËÐÐio_context
-    std::thread([&io_context]() { io_context.run(); }).detach();//[17-46:52]ÎªÊ²Ã´ÕâÀïÒªµ¥¶À¸øËûÅäÒ»¸öÏß³Ì
-    //µÈ´ý·þÎñÆ÷¹Ø±Õ
+    //ï¿½Úµï¿½ï¿½ï¿½ï¿½ß³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½io_context
+    std::thread([&io_context]() { io_context.run(); }).detach();//[17-46:52]ÎªÊ²Ã´ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ß³ï¿½
+    //ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
     server->Wait();
 }
 
