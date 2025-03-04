@@ -8,9 +8,9 @@
 #include <functional>	//回调
 #include <map>
 #include <unordered_map>
-#include <json/json.h>		//json格式
-#include <json/value.h>		//json值
-#include <json/reader.h>	//解析
+#include <jsoncpp/json/json.h>		//json格式
+#include <jsoncpp/json/value.h>		//json值
+#include <jsoncpp/json/reader.h>	//解析
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp> //read_ini
@@ -18,7 +18,7 @@
 #include <queue>
 #include <mutex>
 #include <condition_variable>
-#include "hiredis.h"
+#include <hiredis/hiredis.h>
 #include <cassert>
 
 namespace beast = boost::beast;

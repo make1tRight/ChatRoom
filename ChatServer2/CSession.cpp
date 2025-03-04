@@ -5,9 +5,9 @@
 
 CSession::CSession(net::io_context& io_context, CServer* server) 
 	: _socket(io_context), _server(server), _b_close(false), _b_head_parse(false), _user_uid(0) {
-	boost::uuids::uuid a_uuid = boost::uuids::random_generator()();	//ÎªÃ¿¸ösessionÉú³Éuid
+	boost::uuids::uuid a_uuid = boost::uuids::random_generator()();	//ÎªÃ¿ï¿½ï¿½sessionï¿½ï¿½ï¿½ï¿½uid
 	_session_id = boost::uuids::to_string(a_uuid);
-	_recv_head_node = std::make_shared<MsgNode>(HEAD_TOTAL_LEN);	//¸ù¾ÝÍ·²¿³¤¶ÈÈ¥½ÓÊÕÍ·²¿
+	_recv_head_node = std::make_shared<MsgNode>(HEAD_TOTAL_LEN);	//ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¥ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½
 }
 
 CSession::~CSession() {
@@ -35,7 +35,7 @@ void CSession::Start() {
 	AsyncReadHead(HEAD_TOTAL_LEN);
 }
 
-//[19-52:14]¶ÓÁÐÄÜ¹»±£Ö¤Òì²½²Ù×÷µÄÓÐÐòÐÔ, ±ÈÈçËµÒì²½·¢ËÍ2¸öhello world¾ÍÒªÓÃµ½,·ñÔò¿ÉÄÜÂÒÐò
+//[19-52:14]ï¿½ï¿½ï¿½ï¿½ï¿½Ü¹ï¿½ï¿½ï¿½Ö¤ï¿½ì²½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½Ëµï¿½ì²½ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½hello worldï¿½ï¿½Òªï¿½Ãµï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void CSession::Send(char* msg, short max_length, short msgid) {
 	std::lock_guard<std::mutex> lock(_send_lock);
 	int send_que_size = _send_que.size();
@@ -44,10 +44,10 @@ void CSession::Send(char* msg, short max_length, short msgid) {
 		return;
 	}
 	_send_que.push(std::make_shared<SendNode>(msg, max_length, msgid));
-	if (send_que_size > 0) {//¶ÓÁÐÀïÃæÓÐ¶à¸öÔªËØµÄÊ±ºòÒªÈÃµÚÒ»¸ö·¢Íê, ±£Ö¤Ë³Ðò
+	if (send_que_size > 0) {//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ôªï¿½Øµï¿½Ê±ï¿½ï¿½Òªï¿½Ãµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Ö¤Ë³ï¿½ï¿½
 		return;
 	}
-	//ÕæÕýµÄ·¢ËÍÂß¼­
+	//ï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
 	auto& msgnode = _send_que.front();
 	net::async_write(_socket, net::buffer(msgnode->_data, msgnode->_total_len),
 		std::bind(&CSession::HandleWrite, this, std::placeholders::_1, SharedSelf()));
@@ -83,7 +83,7 @@ void CSession::AsyncReadBody(int total_len) {
 	asyncReadFull(total_len, [self, this, total_len](const boost::system::error_code& ec, std::size_t bytes_transfered) {
 		try {
 			if (ec) {
-				std::cout << "handle read failed, error is " << ec.what() << std::endl;
+				std::cout << "handle read failed, error is " << ec.message() << std::endl;
 				Close();
 				_server->ClearSession(_session_id);
 				return;
@@ -99,9 +99,9 @@ void CSession::AsyncReadBody(int total_len) {
 			_recv_msg_node->_cur_len += bytes_transfered;
 			_recv_msg_node->_data[_recv_msg_node->_total_len] = '\0';
 			std::cout << "receive data is " << _recv_msg_node->_data << std::endl;
-			//½«ÏûÏ¢Í¶µÝµ½Âß¼­¶ÓÁÐ
+			//ï¿½ï¿½ï¿½ï¿½Ï¢Í¶ï¿½Ýµï¿½ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½
 			LogicSystem::GetInstance()->PostMsgToQue(std::make_shared<LogicNode>(shared_from_this(), _recv_msg_node));
-			//¼ÌÐø¼àÌýÍ·²¿(½ÓÊÕÏÂÒ»¸öÊÂ¼þ)
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Â¼ï¿½)
 			AsyncReadHead(HEAD_TOTAL_LEN);
 		}
 		catch (std::exception& e) {
@@ -113,11 +113,11 @@ void CSession::AsyncReadBody(int total_len) {
 
 void CSession::AsyncReadHead(int total_len) {
 	auto self = shared_from_this();
-	//±ØÐë¶ÁÍêÕûÍ·²¿(4×Ö½Ú)²Å»á´¥·¢»Øµ÷
-	asyncReadFull(HEAD_TOTAL_LEN, [self, this](const boost::system::error_code& ec, std::size_t bytes_transfered) {//¶ÁÈ«ÁË²Å»á»Øµ÷±¾º¯Êý
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½(4ï¿½Ö½ï¿½)ï¿½Å»á´¥ï¿½ï¿½ï¿½Øµï¿½
+	asyncReadFull(HEAD_TOTAL_LEN, [self, this](const boost::system::error_code& ec, std::size_t bytes_transfered) {//ï¿½ï¿½È«ï¿½Ë²Å»ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		try {
 			if (ec) {
-				std::cout << "handle read failed, error is " << ec.what() << std::endl;
+				std::cout << "handle read failed, error is " << ec.message() << std::endl;
 				Close();
 				_server->ClearSession(_session_id);
 				return;
@@ -131,25 +131,25 @@ void CSession::AsyncReadHead(int total_len) {
 			}
 			_recv_head_node->Clear();
 			memcpy(_recv_head_node->_data, _data, bytes_transfered);
-			//»ñÈ¡Í·²¿MSGIDÊý¾Ý
+			//ï¿½ï¿½È¡Í·ï¿½ï¿½MSGIDï¿½ï¿½ï¿½ï¿½
 			short msg_id = 0;
 			memcpy(&msg_id, _recv_head_node->_data, HEAD_ID_LEN);
-			//ÍøÂç×Ö½ÚÐò×ª»¯Îª±¾µØ×Ö½ÚÐò
+			//ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½
 			msg_id = boost::asio::detail::socket_ops::network_to_host_short(msg_id);
 			std::cout << "msg_id is " << msg_id << std::endl;
-			//id·Ç·¨
+			//idï¿½Ç·ï¿½
 			if (msg_id > MAX_LENGTH) {
 				std::cout << "invalid msg_id is " << msg_id << std::endl;
 				_server->ClearSession(_session_id);
 				return;
 			}
-			//»ñÈ¡Í·²¿³¤¶ÈÊý¾Ý
+			//ï¿½ï¿½È¡Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			short msg_len = 0;
 			memcpy(&msg_len, _recv_head_node->_data + HEAD_ID_LEN, HEAD_DATA_LEN);
-			//ÍøÂç×Ö½ÚÐò×ª»¯Îª±¾µØ×Ö½ÚÐò
+			//ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½
 			msg_len = boost::asio::detail::socket_ops::network_to_host_short(msg_len);
 			std::cout << "msg_len is " << msg_len << std::endl;
-			//id·Ç·¨
+			//idï¿½Ç·ï¿½
 			if (msg_len > MAX_LENGTH) {
 				std::cout << "invalid data length is " << msg_len << std::endl;
 				_server->ClearSession(_session_id);
@@ -164,35 +164,35 @@ void CSession::AsyncReadHead(int total_len) {
 	});
 }
 
-//¶ÁÈ¡ÍêÕû³¤¶È
+//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void CSession::asyncReadFull(std::size_t maxLength,
 	std::function<void(const boost::system::error_code&, std::size_t)> handler) {
 	::memset(_data, 0, MAX_LENGTH);
-	asyncReadLen(0, maxLength, handler);	//¶ÁÍêÕûÒÔºó»Øµ÷handler
+	asyncReadLen(0, maxLength, handler);	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½Øµï¿½handler
 }
 
-//¶ÁÈ¡Ö¸¶¨×Ö½ÚÊý
+//ï¿½ï¿½È¡Ö¸ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½
 void CSession::asyncReadLen(std::size_t read_len, std::size_t total_len,
 	std::function<void(const boost::system::error_code&, std::size_t)> handler) {
 	auto self = shared_from_this();
 	_socket.async_read_some(net::buffer(_data + read_len, total_len - read_len),
 		[read_len, total_len, handler, self](const boost::system::error_code& ec, std::size_t bytesTransfered) {
 		if (ec) {
-			//³öÏÖ´íÎóµ÷ÓÃ»Øµ÷º¯Êý
+			//ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½Ã»Øµï¿½ï¿½ï¿½ï¿½ï¿½
 			handler(ec, read_len + bytesTransfered);
 			return;
 		}
 		if (read_len + bytesTransfered >= total_len) {
-			//³¤¶È¹»ÁËµ÷ÓÃ»Øµ÷º¯Êý
+			//ï¿½ï¿½ï¿½È¹ï¿½ï¿½Ëµï¿½ï¿½Ã»Øµï¿½ï¿½ï¿½ï¿½ï¿½
 			handler(ec, read_len + bytesTransfered);
 			return;
 		}
-		//Ã»ÓÐ´íÎó, ³¤¶È²»×ã¼ÌÐøµÈ´ý±¾±¨½ÓÊÕÍê(×¢ÒâÆðµãµÄÎ»ÖÃ)
+		//Ã»ï¿½Ð´ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½È²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½)
 		self->asyncReadLen(read_len + bytesTransfered, total_len, handler);
 	});
 }
 
-//[19-54:11]Òì²½·¢ËÍÈçºÎ±£Ö¤Ïß³ÌµÄ°²È«ÐÔ
+//[19-54:11]ï¿½ì²½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î±ï¿½Ö¤ï¿½ß³ÌµÄ°ï¿½È«ï¿½ï¿½
 void CSession::HandleWrite(const boost::system::error_code& error, std::shared_ptr<CSession> shared_self) {
 	try {
 		if (!error) {
@@ -205,7 +205,7 @@ void CSession::HandleWrite(const boost::system::error_code& error, std::shared_p
 			}
 		}
 		else {
-			std::cout << "handle write failed, error is " << error.what() << std::endl;
+			std::cout << "handle write failed, error is " << error.message() << std::endl;
 			Close();
 			_server->ClearSession(_session_id);
 		}

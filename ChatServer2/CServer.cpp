@@ -14,7 +14,7 @@ CServer::~CServer() {
 
 void CServer::ClearSession(std::string session_id) {
     if (m_sessions.find(session_id) != m_sessions.end()) {
-        //ÒÆ³ıÓÃ»§ºÍsessionÖ®¼äµÄ¹ØÁª
+        //ï¿½Æ³ï¿½ï¿½Ã»ï¿½ï¿½ï¿½sessionÖ®ï¿½ï¿½Ä¹ï¿½ï¿½ï¿½
         UserMgr::GetInstance()->RmvUserSession(m_sessions[session_id]->GetUserId());
     }
 
@@ -31,13 +31,13 @@ void CServer::HandleAccept(std::shared_ptr<CSession> new_session, const boost::s
         m_sessions.insert(std::make_pair(new_session->GetSessionId(), new_session));
     }
     else {
-        std::cout << "session accept failed, error is " << error.what() << std::endl;
+        std::cout << "session accept failed, error is " << error.message() << std::endl;
     }
     StartAccept();
 }
 
 void CServer::StartAccept() {
     auto& io_context = AsioIOContextPool::GetInstance()->GetIOContext();
-    std::shared_ptr<CSession> new_session = std::make_shared<CSession>(io_context, this);//CSessionÓÃÓÚÊµ¼ÊÓëclientÍ¨ĞÅ
+    std::shared_ptr<CSession> new_session = std::make_shared<CSession>(io_context, this);//CSessionï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½clientÍ¨ï¿½ï¿½
     m_acceptor.async_accept(new_session->GetSocket(), std::bind(&CServer::HandleAccept, this, new_session, std::placeholders::_1));
 }
