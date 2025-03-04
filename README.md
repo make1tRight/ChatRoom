@@ -57,7 +57,7 @@ sudo apt install libmysqlcppconn-dev
 ### 1. 下载grpc源码包
 ```bash
 # 获取源码包
-git clone https://github.com/grpc/grpc.git`
+git clone https://github.com/grpc/grpc.git
 cd grpc
 ```
 
