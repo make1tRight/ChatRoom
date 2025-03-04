@@ -4,28 +4,17 @@ project(GateServer)
 # 设置 C++ 标准
 set(CMAKE_CXX_STANDARD 20)
 
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "Debug")
-endif()
-
-# 查找 Boost 库的组件
+# 查找依赖项的组件(include&lib)
 find_package(Boost REQUIRED COMPONENTS filesystem thread)
 find_package(Protobuf REQUIRED)
 find_package(jsoncpp REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 find_package(utf8_range REQUIRED)
 
-
-# find_library(HIREDIS_LIB hiredis)
-
-message(STATUS "Protobuf_INCLUDE_DIRS: ${Protobuf_INCLUDE_DIRS}")
-message(STATUS "Protobuf_LIBRARIES: ${Protobuf_LIBRARIES}")
-message(STATUS "jsoncpp_INCLUDE_DIRS: ${jsoncpp_INCLUDE_DIRS}")
-message(STATUS "jsoncpp_LIBRARIES: ${jsoncpp_LIBRARIES}")
-message(STATUS "gRPC_INCLUDE_DIRS: ${gRPC_INCLUDE_DIRS}")
-message(STATUS "gRPC_LIBRARIES: ${gRPC_LIBRARIES}")
 message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
 message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARIES}")
+message(STATUS "Protobuf_INCLUDE_DIRS: ${Protobuf_INCLUDE_DIRS}")
+message(STATUS "Protobuf_LIBRARIES: ${Protobuf_LIBRARIES}")
 
 
 # 添加可执行文件和源文件
